@@ -15,10 +15,11 @@ namespace BusinessLogic.Logic
     {
 
         private readonly MarketDbContext _context;
-        public ProductoRepository(MarketDbContext context) {
+        public ProductoRepository(MarketDbContext context)
+        {
 
-            _context = context;       
-        
+            _context = context;
+
         }
 
         public async Task<Producto> GetProductoByIdAsync(int id)
@@ -26,7 +27,7 @@ namespace BusinessLogic.Logic
             return await _context.Producto
                                             .Include(p => p.Marca)
                                             .Include(p => p.Categoria)
-                                            .FirstOrDefaultAsync(p => p.Id == id);  
+                                            .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IReadOnlyList<Producto>> GetProductosAsync()
@@ -35,7 +36,7 @@ namespace BusinessLogic.Logic
                                             .Include(p => p.Categoria)
                                             .Include(p => p.Marca)
                                             .ToListAsync();
-                                    
+
         }
     }
 }

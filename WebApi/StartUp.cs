@@ -7,6 +7,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebApi.DTO;
+using WebApi.Middleware;
 
 namespace WebApi
 {
@@ -22,7 +24,7 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-
+            services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddDbContext<MarketDbContext>(opt =>
             {
@@ -34,15 +36,16 @@ namespace WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();    
-            }
+            app.UseMiddleware<ExceptionMiddleware>();
 
+            app.UseStatusCodePagesWithReExecute("/errors", "?code={0}");
 
             app.UseRouting();
+
             app.UseAuthorization();
+
             app.UseAuthentication();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

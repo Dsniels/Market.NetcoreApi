@@ -10,8 +10,10 @@ namespace Core.Specifications
     public class ProductoForCountingSpecification : BaseSpecification<Producto>
     {
         public ProductoForCountingSpecification(ProductoSpecificationsParamts productoParams)
-           : base(x => (!productoParams.Marca.HasValue || x.MarcaId == productoParams.Marca) &&
-                       (!productoParams.Categoria.HasValue || x.CategoriaId == productoParams.Categoria)
+           : base(x =>
+           (string.IsNullOrEmpty(productoParams.Search) || x.Nombre.Contains(productoParams.Search)) &&
+           (!productoParams.Marca.HasValue || x.MarcaId == productoParams.Marca) &&
+           (!productoParams.Categoria.HasValue || x.CategoriaId == productoParams.Categoria)
            )
         { 
 

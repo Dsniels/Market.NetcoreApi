@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Data;
 using WebApi.DTO;
 using WebApi.Middleware;
 
@@ -24,6 +25,7 @@ namespace WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
+
             services.AddAutoMapper(typeof(MappingProfiles));
             services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             services.AddDbContext<MarketDbContext>(opt =>
@@ -32,15 +34,20 @@ namespace WebApi
             });
             services.AddTransient<IProductoRepository, ProductoRepository>();
             services.AddControllers();
+            services.AddCors(opt => opt.AddPolicy("CorsRule", rule => rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"))) ;
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseStatusCodePagesWithReExecute("/errors", "?code={0}");
 
             app.UseRouting();
+
+            app.UseCors("CorsRule");
 
             app.UseAuthorization();
 

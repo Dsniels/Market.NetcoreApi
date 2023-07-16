@@ -16,8 +16,23 @@ namespace BusinessLogic.Data
             if (spec.Criteria != null)
             {
                 inputQuery = inputQuery.Where(spec.Criteria);
+            }
+            
+            if (spec.Orderby != null) {
+                inputQuery = inputQuery.OrderBy(spec.Orderby);
+            }
+            if (spec.OrderByDescending != null)
+            {
+                inputQuery = inputQuery.OrderByDescending(spec.OrderByDescending);
+            }
+
+            if (spec.IsPagingEnabled)
+            {
+                inputQuery = inputQuery.Skip(spec.Skip).Take(spec.Take);
 
             }
+
+
 
             inputQuery = spec.Includes.Aggregate(inputQuery, (current, include) => current.Include(include));
 

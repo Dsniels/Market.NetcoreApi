@@ -22,7 +22,7 @@ namespace WebApi.Middleware
             _env = env;
         }
 
-        public async Task TaskAsync(HttpContext context)
+        public async Task InvokeAsync(HttpContext context)
         {
             try
             {

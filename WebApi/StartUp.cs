@@ -32,6 +32,12 @@ namespace WebApi
             {
                 opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddDbContext<SeguridadDbContext>(x =>
+            {
+                x.UseSqlServer(Configuration.GetConnectionString("IdentitySeguridad"));
+            });
+
             services.AddTransient<IProductoRepository, ProductoRepository>();
             services.AddControllers();
             services.AddCors(opt => opt.AddPolicy("CorsRule", rule => rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"))) ;

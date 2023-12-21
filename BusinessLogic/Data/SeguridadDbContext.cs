@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Core.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLogic.Data
 {
-    public class SeguridadDbContext : IdentityDbContext
+    public class SeguridadDbContext : IdentityDbContext<Usuario>
     {
         public SeguridadDbContext(DbContextOptions<SeguridadDbContext> options): base(options) { }
 

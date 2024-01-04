@@ -20,6 +20,7 @@ namespace BusinessLogic.Data
                     Nombre = "Daniel",
                     Apellido = "Salazar",
                     UserName = "Dasa",
+                    Email = "dsnielsalazarr@outlook.com",
                     Direccion = new Direccion()
                     {
                         Calle = "Foresta 131",
@@ -28,7 +29,7 @@ namespace BusinessLogic.Data
                         Departamento = "Mty",
                     }
                 };
-                await userManager.CreateAsync(usuario, "12345678");
+                await userManager.CreateAsync(usuario, "Dasa271278$");
 
             }
         }

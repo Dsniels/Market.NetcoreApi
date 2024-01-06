@@ -18,10 +18,11 @@ namespace BusinessLogic.Logic
 
         private readonly IConfiguration _config;
 
-        public TokenService(SymmetricSecurityKey key, IConfiguration config)
+        public TokenService(IConfiguration config)
         {
-            _key = key;
             _config = config;
+            _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:Key"]));
+
 
         }
         public string CreateToken(Usuario usuario)

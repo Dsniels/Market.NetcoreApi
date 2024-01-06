@@ -29,7 +29,7 @@ namespace BusinessLogic.Data
                         Departamento = "Mty",
                     }
                 };
-                await userManager.CreateAsync(usuario, "Dasa271278$");
+                await userManager.CreateAsync(usuario, "DanielSalazar271278$");
 
             }
         }

@@ -1,11 +1,15 @@
 ﻿using Core.Entities;
 using Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using WebApi.DTO;
 using WebApi.Errors;
+using WebApi.Extensions;
 
 namespace WebApi.Controllers
 {
@@ -80,5 +84,49 @@ namespace WebApi.Controllers
                 Username = usuario.UserName
             };
         }
+
+
+        [Authorize]
+        [HttpGet]
+        public async Task<ActionResult<UsuarioDto>> GetUsuario()
+        {
+            var usuario = await _userManager.BuscarUsuarioAsync(HttpContext.User);
+
+            return new UsuarioDto
+            {
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Username = usuario.UserName,
+                Token = _tokenService.CreateToken(usuario)
+            };
+
+        }
+
+        [HttpGet("emailvalido")]
+
+        public async Task<ActionResult<bool>> ValidarEmail([FromQuery] string email)
+        {
+            var usuario = await _userManager.FindByEmailAsync(email);
+
+            if (usuario == null) return false;
+
+            return true;
+
+        }
+
+        [Authorize]
+        [HttpGet("direccion")]
+
+        public async Task<ActionResult<Direccion>> GetDireccion()
+        {
+
+            var usuario = await _userManager.BuscarUsuarioConDireccionAsync(HttpContext.User);
+
+            return usuario.Direccion;
+        }
+
+
+
     }
 }

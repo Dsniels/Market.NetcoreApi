@@ -130,22 +130,17 @@ namespace WebApi.Controllers
             return _mapper.Map<Direccion, DireccionDto>(usuario.Direccion);
         }
 
+
         [Authorize]
         [HttpPut("direccion")]
-
         public async Task<ActionResult<DireccionDto>> UpdateDireccion(DireccionDto direccion)
         {
-            var usuario = await _userManager.BuscarUsuarioAsync(HttpContext.User);
-
+            var usuario = await _userManager.BuscarUsuarioConDireccionAsync(HttpContext.User);
             usuario.Direccion = _mapper.Map<DireccionDto, Direccion>(direccion);
-
-            var result = await _userManager.UpdateAsync(usuario);
-
-            if (result.Succeeded) return Ok(_mapper.Map< Direccion, DireccionDto>(usuario.Direccion));
+            var resultado = await _userManager.UpdateAsync(usuario);
+            if (resultado.Succeeded) return Ok(_mapper.Map<Direccion, DireccionDto>(usuario.Direccion));
 
             return BadRequest("No se pudo actualizar la direccion del usuario");
-
-
         }
 
 

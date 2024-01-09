@@ -1,9 +1,11 @@
-﻿using Core.Entities;
+﻿using AutoMapper;
+using Core.Entities;
 using Core.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -20,12 +22,14 @@ namespace WebApi.Controllers
         private readonly UserManager<Usuario> _userManager;
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ITokenService _tokenService;
+        private readonly IMapper _mapper;
 
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ITokenService tokenService)
+        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
+            _mapper = mapper;   
 
         }
 
@@ -118,12 +122,30 @@ namespace WebApi.Controllers
         [Authorize]
         [HttpGet("direccion")]
 
-        public async Task<ActionResult<Direccion>> GetDireccion()
+        public async Task<ActionResult<DireccionDto>> GetDireccion()
         {
 
             var usuario = await _userManager.BuscarUsuarioConDireccionAsync(HttpContext.User);
 
-            return usuario.Direccion;
+            return _mapper.Map<Direccion, DireccionDto>(usuario.Direccion);
+        }
+
+        [Authorize]
+        [HttpPut("direccion")]
+
+        public async Task<ActionResult<DireccionDto>> UpdateDireccion(DireccionDto direccion)
+        {
+            var usuario = await _userManager.BuscarUsuarioAsync(HttpContext.User);
+
+            usuario.Direccion = _mapper.Map<DireccionDto, Direccion>(direccion);
+
+            var result = await _userManager.UpdateAsync(usuario);
+
+            if (result.Succeeded) return Ok(_mapper.Map< Direccion, DireccionDto>(usuario.Direccion));
+
+            return BadRequest("No se pudo actualizar la direccion del usuario");
+
+
         }
 
 

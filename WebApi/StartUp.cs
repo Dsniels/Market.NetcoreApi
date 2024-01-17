@@ -76,7 +76,11 @@ namespace WebApi
             });
 
             services.AddTransient<IProductoRepository, ProductoRepository>();
+
             services.AddControllers();
+
+            services.AddScoped<ICarritoCompraRepository, CarritoCompraRepository>();
+
             services.AddCors(opt => opt.AddPolicy("CorsRule", rule => rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"))) ;
         }
 

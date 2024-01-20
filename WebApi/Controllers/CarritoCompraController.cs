@@ -36,7 +36,7 @@ namespace WebApi.Controllers
 
         [HttpDelete]
 
-        public async Task<ActionResult<CarritoCompra>> DeleteCarritoCompra(string id)
+        public async Task DeleteCarritoCompra(string id)
         {
             await _carritoCompra.DeleteCarritoCompraAsync(id);
         }

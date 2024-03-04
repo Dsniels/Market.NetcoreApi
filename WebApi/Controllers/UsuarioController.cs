@@ -23,14 +23,17 @@ namespace WebApi.Controllers
         private readonly SignInManager<Usuario> _signInManager;
         private readonly ITokenService _tokenService;
         private readonly IMapper _mapper;
+        private readonly IPasswordHasher<Usuario> _passwordHasher;
 
-        public UsuarioController(UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ITokenService tokenService, IMapper mapper)
+
+
+        public UsuarioController(IPasswordHasher<Usuario> passwordHasher, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _tokenService = tokenService;
-            _mapper = mapper;   
-
+            _mapper = mapper;
+            _passwordHasher = passwordHasher;
         }
 
         [HttpPost("login")]
@@ -46,7 +49,8 @@ namespace WebApi.Controllers
 
             var resultado = await _signInManager.CheckPasswordSignInAsync(usuario, loginDtio.Password, false);
 
-            if (!resultado.Succeeded) {
+            if (!resultado.Succeeded)
+            {
                 return Unauthorized(new CodeErrorResponse(401));
             }
 
@@ -87,6 +91,42 @@ namespace WebApi.Controllers
                 Email = usuario.Email,
                 Username = usuario.UserName
             };
+        }
+
+        [HttpPut("actualizar/{id}")]
+        public async Task<ActionResult<UsuarioDto>> Actualizar(string id, RegistrarDto registrarDto)
+        {
+            var usuario = await _userManager.FindByIdAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound(new CodeErrorResponse(404, "El usuario no existe"));
+            }
+
+            usuario.Nombre = registrarDto.Nombre;
+            usuario.Apellido = registrarDto.Apellido;
+            usuario.PasswordHash = _passwordHasher.HashPassword(usuario, registrarDto.Password);
+
+            var result = await _userManager.UpdateAsync(usuario);
+
+            if (!result.Succeeded)
+            {
+                return BadRequest(new CodeErrorResponse(404, "No se pudo encontrar el Usuario"));
+            }
+
+
+            return new UsuarioDto
+            {
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Username = usuario.UserName,
+                Token = _tokenService.CreateToken(usuario),
+                Imagen = usuario.Imagen
+            };
+
+
+
         }
 
 

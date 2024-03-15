@@ -31,10 +31,6 @@ namespace WebApi.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
 
 
-
-
-
-
         public UsuarioController(RoleManager<IdentityRole> roleManager, IPasswordHasher<Usuario> passwordHasher, IGenericSeguridadRepository<Usuario> seguridadRepository, UserManager<Usuario> userManager, SignInManager<Usuario> signInManager, ITokenService tokenService, IMapper mapper)
         {
             _signInManager = signInManager;
@@ -46,8 +42,8 @@ namespace WebApi.Controllers
             _roleManager = roleManager;
         }
 
-        [HttpPost("login")]
 
+        [HttpPost("login")]
         public async Task<ActionResult<UsuarioDto>> Login(LoginDto loginDtio)
         {
             var usuario = await _userManager.FindByEmailAsync(loginDtio.Email);
@@ -63,14 +59,17 @@ namespace WebApi.Controllers
             {
                 return Unauthorized(new CodeErrorResponse(401));
             }
+            var roles = await _userManager.GetRolesAsync(usuario);
 
             return new UsuarioDto
             {
                 Email = usuario.Email,
                 Username = usuario.UserName,
-                Token = _tokenService.CreateToken(usuario),
+                Token = _tokenService.CreateToken(usuario, roles),
+                Imagen = usuario.Imagen,
                 Nombre = usuario.Nombre,
-                Apellido = usuario.Apellido
+                Apellido = usuario.Apellido,
+                Admin = roles.Contains("ADMIN") ? true : false
             };
         }
 
@@ -97,12 +96,14 @@ namespace WebApi.Controllers
             {
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
-                Token = _tokenService.CreateToken(usuario),
+                Token = _tokenService.CreateToken(usuario, null),
                 Email = usuario.Email,
-                Username = usuario.UserName
+                Username = usuario.UserName,
+                Admin = false
             };
         }
 
+        [Authorize]
         [HttpPut("actualizar/{id}")]
         public async Task<ActionResult<UsuarioDto>> Actualizar(string id, RegistrarDto registrarDto)
         {
@@ -115,7 +116,15 @@ namespace WebApi.Controllers
 
             usuario.Nombre = registrarDto.Nombre;
             usuario.Apellido = registrarDto.Apellido;
-            usuario.PasswordHash = _passwordHasher.HashPassword(usuario, registrarDto.Password);
+            usuario.Imagen = registrarDto.Imagen;
+
+
+
+            if (!string.IsNullOrEmpty(registrarDto.Password))
+            {
+                usuario.PasswordHash = _passwordHasher.HashPassword(usuario, registrarDto.Password);
+            }
+
 
             var result = await _userManager.UpdateAsync(usuario);
 
@@ -124,23 +133,24 @@ namespace WebApi.Controllers
                 return BadRequest(new CodeErrorResponse(404, "No se pudo encontrar el Usuario"));
             }
 
-
+            var roles = await _userManager.GetRolesAsync(usuario);
             return new UsuarioDto
             {
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email,
                 Username = usuario.UserName,
-                Token = _tokenService.CreateToken(usuario),
-                Imagen = usuario.Imagen
+                Token = _tokenService.CreateToken(usuario, roles),
+                Imagen = usuario.Imagen,
+                Admin = roles.Contains("ADMIN") ? true : false,
             };
 
 
 
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpGet("pagination")]
-
         public async Task<ActionResult<Pagination<UsuarioDto>>> GetUsuarios([FromQuery] UsuarioSpecificationParams usuarioparams)
         {
             var spec = new UsuarioSpecification(usuarioparams);
@@ -149,10 +159,10 @@ namespace WebApi.Controllers
             var specCount = new UsuarioForCountingSpecification(usuarioparams);
             var totalUsuarios = await _seguridadRepository.CountAsync(specCount);
 
-            var rounded = Math.Ceiling( Convert.ToDecimal(totalUsuarios) /Convert.ToDecimal(usuarioparams.PageSize));
+            var rounded = Math.Ceiling(Convert.ToDecimal(totalUsuarios) / Convert.ToDecimal(usuarioparams.PageSize));
             var totalPages = Convert.ToInt32(rounded);
 
-            var data = _mapper.Map<IReadOnlyList<Usuario>, IReadOnlyList< UsuarioDto >> (usuarios);
+            var data = _mapper.Map<IReadOnlyList<Usuario>, IReadOnlyList<UsuarioDto>>(usuarios);
             return Ok(new Pagination<UsuarioDto>
             {
                 Count = totalUsuarios,
@@ -163,10 +173,11 @@ namespace WebApi.Controllers
             }
 
 
-            ) ;
-            
+            );
+
         }
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("role/{id}")]
         public async Task<ActionResult<UsuarioDto>> UpdateRole(string id, RoleDto roleParam)
         {
@@ -186,7 +197,7 @@ namespace WebApi.Controllers
 
             }
             var usuarioDto = _mapper.Map<Usuario, UsuarioDto>(usuario);
-            
+
             if (roleParam.Status)
             {
                 var result = await _userManager.AddToRoleAsync(usuario, roleParam.Nombre);
@@ -197,7 +208,7 @@ namespace WebApi.Controllers
 
                 if (result.Errors.Any())
                 {
-                    if(result.Errors.Where(x => x.Code == "UserAlreadyInRole").Any())
+                    if (result.Errors.Where(x => x.Code == "UserAlreadyInRole").Any())
                     {
                         usuarioDto.Admin = true;
                     }
@@ -213,14 +224,45 @@ namespace WebApi.Controllers
 
             }
 
+            if (usuarioDto.Admin)
+            {
+
+                var roles = new List<string>();
+                roles.Add("ADMIN");
+                usuarioDto.Token = _tokenService.CreateToken(usuario, roles);
+            }
+            else
+            {
+                usuarioDto.Token = _tokenService.CreateToken(usuario, null);
+            }
+
             return usuarioDto;
 
 
         }
 
+        [Authorize(Roles = "ADMIN")]
+        [HttpGet("account/{id}")]
+        public async Task<ActionResult<UsuarioDto>> GetUsuarioBy(string id)
+        {
+            var usuario = await _userManager.FindByIdAsync(id);
 
+            if(usuario == null)
+            {
+                return NotFound(new CodeErrorResponse(404, "El usuario no existe"));
+            }
 
-
+            var roles = await _userManager.GetRolesAsync(usuario);
+            return new UsuarioDto
+            {
+                Nombre = usuario.Nombre,
+                Apellido = usuario.Apellido,
+                Email = usuario.Email,
+                Username = usuario.UserName,
+                Imagen = usuario.Imagen,
+                Admin = roles.Contains("ADMIN") ? true : false
+            };
+        }
 
 
         [Authorize]
@@ -229,19 +271,23 @@ namespace WebApi.Controllers
         {
             var usuario = await _userManager.BuscarUsuarioAsync(HttpContext.User);
 
+            var roles = await _userManager.GetRolesAsync(usuario);
+
             return new UsuarioDto
             {
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Email = usuario.Email,
                 Username = usuario.UserName,
-                Token = _tokenService.CreateToken(usuario)
+                Imagen = usuario.Imagen,
+                Token = _tokenService.CreateToken(usuario,roles),
+                Admin = roles.Contains("ADMIN")? true:false,
             };
 
         }
 
-        [HttpGet("emailvalido")]
 
+        [HttpGet("emailvalido")]
         public async Task<ActionResult<bool>> ValidarEmail([FromQuery] string email)
         {
             var usuario = await _userManager.FindByEmailAsync(email);
@@ -254,7 +300,6 @@ namespace WebApi.Controllers
 
         [Authorize]
         [HttpGet("direccion")]
-
         public async Task<ActionResult<DireccionDto>> GetDireccion()
         {
 

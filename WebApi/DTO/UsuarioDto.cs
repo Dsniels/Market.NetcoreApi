@@ -9,7 +9,7 @@
         public string Apellido { get; set;}
         public string Imagen { get; set;}
         public bool Admin { get; set;}
-        
+        public string Id { get; set;}   
 
 
     }

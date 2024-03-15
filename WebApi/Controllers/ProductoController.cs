@@ -2,6 +2,7 @@
 using Core.Entities;
 using Core.Interfaces;
 using Core.Specifications;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -33,7 +34,6 @@ namespace WebApi.Controllers
             var productos = await _productoRepository.GetAllWithSpec(spec);
 
             var specCount = new ProductoForCountingSpecification(productoParams);
-            
             var totalProductos= await _productoRepository.CountAsync(specCount);
 
             var rounded = Math.Ceiling ( Convert.ToDecimal(totalProductos / productoParams.PageSize)) ;
@@ -69,6 +69,7 @@ namespace WebApi.Controllers
         }
 
 
+        [Authorize(Roles = "ADMIN")]
         [HttpPost]
         public async Task<ActionResult<Producto>> post(Producto producto)
         {
@@ -82,6 +83,8 @@ namespace WebApi.Controllers
             return Ok(producto);
         }
 
+
+        [Authorize(Roles ="ADMIN")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Producto>> put(int id, Producto producto)
         {

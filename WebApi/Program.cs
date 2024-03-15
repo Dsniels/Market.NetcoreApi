@@ -28,9 +28,10 @@ public class Program
 
 
                 var userManager = services.GetRequiredService<UserManager<Usuario>>();
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
                 var identityContext = services.GetRequiredService<SeguridadDbContext>();
                 await identityContext.Database.MigrateAsync();
-                await SeguridadDbContextData.SeedUserAsync(userManager);
+                await SeguridadDbContextData.SeedUserAsync(userManager, roleManager);
 
 
 

@@ -38,7 +38,7 @@ namespace WebApi
 
 
             services.AddScoped<ITokenService, TokenService>();
-            
+            services.AddScoped<IOrdenCompraServices, OrdenCompraService>();
             var builder = services.AddIdentityCore<Usuario>();
             builder = new IdentityBuilder(builder.UserType, builder.Services);
             builder.AddRoles<IdentityRole>();

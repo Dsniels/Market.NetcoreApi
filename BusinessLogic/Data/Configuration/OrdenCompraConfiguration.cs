@@ -24,7 +24,7 @@ namespace BusinessLogic.Data.Configuration
                     o => (OrdenStatus)Enum.Parse(typeof(OrdenStatus), o)
                     );
             builder.HasMany( o => o.OrderItems).WithOne().OnDelete(DeleteBehavior.Cascade);
-
+            builder.Property(o => o.SubTotal).HasColumnType("decimal(18,2)");
         }
     }
 }

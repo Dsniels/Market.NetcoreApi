@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,6 +24,7 @@ namespace Core.Entities.OrdenCompra
 
         public string CompradorEmail { get; set; }
         public DateTimeOffset OrdenCompraFecha { get; set; } = DateTimeOffset.Now;
+        [Required]
         public Direccion DireccionEnvio { get; set; }
         public TipoEnvio TipoEnvio { get; set; }
         public IReadOnlyList<OrderItem> OrderItems { get; set; }

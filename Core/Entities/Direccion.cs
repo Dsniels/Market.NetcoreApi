@@ -20,6 +20,8 @@ namespace Core.Entities
         public string UsuarioID { get; set; }
 
         public Usuario Usuario { get; set;}
+        public string Pais { get; set; }
+
 
     }
 }

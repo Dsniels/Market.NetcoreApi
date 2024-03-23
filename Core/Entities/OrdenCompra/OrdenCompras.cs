@@ -28,7 +28,7 @@ namespace Core.Entities.OrdenCompra
         public IReadOnlyList<OrderItem> OrderItems { get; set; }
         public decimal SubTotal { get; set; }
 
-        public OrdenStatus OrdenStatus { get; set; } = OrdenStatus.Pendiente;
+        public OrdenStatus Status { get; set; } = OrdenStatus.Pendiente;
 
         public string PagoIntentoId { get; set; }
 

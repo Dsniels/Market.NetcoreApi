@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Entities;
+using Core.Entities.OrdenCompra;
 
 namespace WebApi.DTO
 {
@@ -11,8 +12,8 @@ namespace WebApi.DTO
                 .ForMember(p => p.CategoriaNombre, x => x.MapFrom(a => a.Categoria.Nombre))
                 .ForMember(p => p.MarcaNombre, x => x.MapFrom(a => a.Marca.Nombre));
 
-            CreateMap<Direccion, DireccionDto>().ReverseMap();
-
+            CreateMap<Core.Entities.Direccion, DireccionDto>().ReverseMap();
+            CreateMap<DireccionDto, Core.Entities.OrdenCompra.Direccion>();
             CreateMap<Usuario, UsuarioDto>().ReverseMap();
 
         }

@@ -17,7 +17,7 @@ namespace WebApi.Controllers
     {
         private readonly IOrdenCompraServices _ordenCompraService;
         private readonly IMapper _mapper;
-        public OrdenCompraController(IMapper mapper ,IOrdenCompraServices ordenCompra)
+        public OrdenCompraController(IMapper mapper, IOrdenCompraServices ordenCompra)
         {
             _ordenCompraService = ordenCompra;
             _mapper = mapper;
@@ -31,10 +31,10 @@ namespace WebApi.Controllers
             var ordenCompra = await _ordenCompraService.AddOrdenCompraAsync(email, ordenCompraDto.TipoEnvio, ordenCompraDto.CarritoCompraId, direccion);
 
 
-            if(ordenCompra == null)
+            if (ordenCompra == null)
             {
                 return BadRequest(new CodeErrorResponse(400, "Errores creado la orden de compra"));
-                
+
             }
 
             return Ok(ordenCompra);

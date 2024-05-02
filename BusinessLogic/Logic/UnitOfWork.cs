@@ -33,14 +33,15 @@ namespace BusinessLogic.Logic
 
         public IGenericRepository<T> Repository<T>() where T : ClaseBase
         {
-            if(_repositories == null)
+            if (_repositories == null)
             {
-                _repositories = new Hashtable();    
+                _repositories = new Hashtable();
             }
 
             var type = typeof(T).Name;
 
-            if(!_repositories.ContainsKey(type)) {
+            if (!_repositories.ContainsKey(type))
+            {
                 var repositoryType = typeof(GenericRepository<>);
                 var repositoryInstance = Activator.CreateInstance(repositoryType.MakeGenericType(typeof(T)), _context);
                 _repositories.Add(type, repositoryInstance);

@@ -87,7 +87,7 @@ namespace WebApi
 
             services.AddScoped<ICarritoCompraRepository, CarritoCompraRepository>();
 
-            services.AddCors(opt => opt.AddPolicy("CorsRule", rule => rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*"))) ;
+            services.AddCors(opt => opt.AddPolicy("CorsRule", rule => rule.AllowAnyHeader().AllowAnyMethod().WithOrigins("*")));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

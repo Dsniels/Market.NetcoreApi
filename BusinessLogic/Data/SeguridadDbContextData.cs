@@ -34,7 +34,7 @@ namespace BusinessLogic.Data
 
             }
 
-            if(!roleManager.Roles.Any())
+            if (!roleManager.Roles.Any())
             {
                 var role = new IdentityRole
                 {

@@ -96,7 +96,7 @@ namespace WebApi.Controllers
 
             return new UsuarioDto
             {
-                Id = usuario.Id,    
+                Id = usuario.Id,
                 Nombre = usuario.Nombre,
                 Apellido = usuario.Apellido,
                 Token = _tokenService.CreateToken(usuario, null),
@@ -251,7 +251,7 @@ namespace WebApi.Controllers
         {
             var usuario = await _userManager.FindByIdAsync(id);
 
-            if(usuario == null)
+            if (usuario == null)
             {
                 return NotFound(new CodeErrorResponse(404, "El usuario no existe"));
             }
@@ -286,8 +286,8 @@ namespace WebApi.Controllers
                 Email = usuario.Email,
                 Username = usuario.UserName,
                 Imagen = usuario.Imagen,
-                Token = _tokenService.CreateToken(usuario,roles),
-                Admin = roles.Contains("ADMIN")? true:false,
+                Token = _tokenService.CreateToken(usuario, roles),
+                Admin = roles.Contains("ADMIN") ? true : false,
             };
 
         }

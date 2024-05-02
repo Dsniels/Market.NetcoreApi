@@ -17,8 +17,9 @@ namespace BusinessLogic.Data
             {
                 inputQuery = inputQuery.Where(spec.Criteria);
             }
-            
-            if (spec.Orderby != null) {
+
+            if (spec.Orderby != null)
+            {
                 inputQuery = inputQuery.OrderBy(spec.Orderby);
             }
             if (spec.OrderByDescending != null)

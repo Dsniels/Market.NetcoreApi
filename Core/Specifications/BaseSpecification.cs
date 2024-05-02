@@ -27,7 +27,7 @@ namespace Core.Specifications
 
         public Expression<Func<T, object>> OrderByDescending { get; private set; }
 
-       
+
 
         protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
         {

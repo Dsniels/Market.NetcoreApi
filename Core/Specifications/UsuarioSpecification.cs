@@ -9,18 +9,18 @@ namespace Core.Specifications
 {
     public class UsuarioSpecification : BaseSpecification<Usuario>
     {
-        public UsuarioSpecification(UsuarioSpecificationParams usuarioParams) 
-        : base(x => 
-            ( string.IsNullOrEmpty(usuarioParams.Search) || x.Nombre.Contains(usuarioParams.Search)) &&
+        public UsuarioSpecification(UsuarioSpecificationParams usuarioParams)
+        : base(x =>
+            (string.IsNullOrEmpty(usuarioParams.Search) || x.Nombre.Contains(usuarioParams.Search)) &&
             (string.IsNullOrEmpty(usuarioParams.Nombre) || x.Nombre.Contains(usuarioParams.Nombre)) &&
             (string.IsNullOrEmpty(usuarioParams.Apellido) || x.Apellido.Contains(usuarioParams.Apellido))
         )
-        { 
+        {
             ApplyPaging(usuarioParams.PageSize * (usuarioParams.PageIndex - 1), usuarioParams.PageSize);
 
             if (!string.IsNullOrEmpty(usuarioParams.Sort))
             {
-                switch(usuarioParams.Sort)
+                switch (usuarioParams.Sort)
                 {
                     case "nombreAsc":
                         AddOrderBy(p => p.Nombre); break;

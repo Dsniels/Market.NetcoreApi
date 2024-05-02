@@ -13,13 +13,13 @@ namespace Core.Entities
 
         public string Ciudad { get; set; }
 
-        public string Departamento { get; set;}
+        public string Departamento { get; set; }
 
         public string CodigoPostal { get; set; }
 
         public string UsuarioID { get; set; }
 
-        public Usuario Usuario { get; set;}
+        public Usuario Usuario { get; set; }
         public string Pais { get; set; }
 
 

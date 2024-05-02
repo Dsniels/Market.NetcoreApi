@@ -19,10 +19,10 @@ namespace BusinessLogic.Logic
         {
             _context = context;
         }
-                
-        public  async Task<IReadOnlyList<T>> GetAllAsync()
+
+        public async Task<IReadOnlyList<T>> GetAllAsync()
         {
-           return await _context.Set<T>().ToListAsync();
+            return await _context.Set<T>().ToListAsync();
         }
 
         public async Task<T> GetByIdAsync(int id)
@@ -46,7 +46,7 @@ namespace BusinessLogic.Logic
 
         public async Task<int> CountAsync(ISpecification<T> spec)
         {
-            return await ApplySpecification(spec).CountAsync(); 
+            return await ApplySpecification(spec).CountAsync();
         }
 
         public async Task<int> add(T entity)

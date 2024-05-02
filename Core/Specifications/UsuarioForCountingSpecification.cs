@@ -9,7 +9,7 @@ namespace Core.Specifications
 {
     public class UsuarioForCountingSpecification : BaseSpecification<Usuario>
     {
-        public UsuarioForCountingSpecification(UsuarioSpecificationParams usuarioParams) 
+        public UsuarioForCountingSpecification(UsuarioSpecificationParams usuarioParams)
         : base(x =>
             (string.IsNullOrEmpty(usuarioParams.Search) || x.Nombre.Contains(usuarioParams.Search)) &&
             (string.IsNullOrEmpty(usuarioParams.Nombre) || x.Nombre.Contains(usuarioParams.Nombre)) &&
@@ -17,8 +17,8 @@ namespace Core.Specifications
 
         )
         {
-                    
-        
-        }    
+
+
+        }
     }
 }

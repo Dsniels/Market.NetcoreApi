@@ -13,7 +13,7 @@ using WebApi.Errors;
 
 namespace WebApi.Controllers
 {
-    
+
     public class ProductoController : BaseApiController
     {
 
@@ -27,16 +27,16 @@ namespace WebApi.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<Pagination<ProductoDto>>> GetProductos([FromQuery]ProductoSpecificationsParamts productoParams)
+        public async Task<ActionResult<Pagination<ProductoDto>>> GetProductos([FromQuery] ProductoSpecificationsParamts productoParams)
         {
             var spec = new ProductoWithCategoriaAndMarcaSpecification(productoParams);
 
             var productos = await _productoRepository.GetAllWithSpec(spec);
 
             var specCount = new ProductoForCountingSpecification(productoParams);
-            var totalProductos= await _productoRepository.CountAsync(specCount);
+            var totalProductos = await _productoRepository.CountAsync(specCount);
 
-            var rounded = Math.Ceiling ( Convert.ToDecimal(totalProductos / productoParams.PageSize)) ;
+            var rounded = Math.Ceiling(Convert.ToDecimal(totalProductos / productoParams.PageSize));
             var totalpage = Convert.ToInt32(rounded);
 
             var data = _mapper.Map<IReadOnlyList<Producto>, IReadOnlyList<ProductoDto>>(productos);
@@ -51,7 +51,7 @@ namespace WebApi.Controllers
                     PageSize = productoParams.PageSize
                 });
 
-          
+
         }
 
         [HttpGet("{id}")]
@@ -75,7 +75,7 @@ namespace WebApi.Controllers
         {
             var result = await _productoRepository.add(producto);
 
-            if(result == 0)
+            if (result == 0)
             {
                 throw new Exception("No se inserto el producto");
             }
@@ -84,14 +84,14 @@ namespace WebApi.Controllers
         }
 
 
-        [Authorize(Roles ="ADMIN")]
+        [Authorize(Roles = "ADMIN")]
         [HttpPut("{id}")]
         public async Task<ActionResult<Producto>> put(int id, Producto producto)
         {
             producto.Id = id;
             var resultado = await _productoRepository.update(producto);
 
-            if(resultado == 0)
+            if (resultado == 0)
             {
                 throw new Exception("No se pudo actualizar el producto");
 

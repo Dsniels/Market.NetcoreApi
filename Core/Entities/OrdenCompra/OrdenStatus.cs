@@ -13,7 +13,7 @@ namespace Core.Entities.OrdenCompra
         Pendiente,
         [EnumMember(Value = "El Pago Fue Recibido")]
         PagoRecibido,
-        [EnumMember(Value ="El pago tuvo errores")]
+        [EnumMember(Value = "El pago tuvo errores")]
         PagoFallido
     }
 }

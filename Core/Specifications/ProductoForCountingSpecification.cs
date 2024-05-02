@@ -15,8 +15,8 @@ namespace Core.Specifications
            (!productoParams.Marca.HasValue || x.MarcaId == productoParams.Marca) &&
            (!productoParams.Categoria.HasValue || x.CategoriaId == productoParams.Categoria)
            )
-        { 
+        {
 
         }
-        }
+    }
 }

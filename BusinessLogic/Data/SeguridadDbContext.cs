@@ -11,7 +11,7 @@ namespace BusinessLogic.Data
 {
     public class SeguridadDbContext : IdentityDbContext<Usuario>
     {
-        public SeguridadDbContext(DbContextOptions<SeguridadDbContext> options): base(options) { }
+        public SeguridadDbContext(DbContextOptions<SeguridadDbContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {

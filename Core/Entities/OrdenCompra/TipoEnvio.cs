@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Core.Entities.OrdenCompra
 {
-    public class TipoEnvio:ClaseBase
+    public class TipoEnvio : ClaseBase
     {
         public string Nombre { get; set; }
         public string DeliveryTime { get; set; }

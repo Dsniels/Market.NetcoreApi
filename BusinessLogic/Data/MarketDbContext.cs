@@ -20,7 +20,7 @@ namespace BusinessLogic.Data
         public DbSet<Marca> Marca { get; set; }
         public DbSet<OrdenCompras> OrdenCompras { get; set; }
 
-        public DbSet<OrderItem > OrderItem { get; set; }    
+        public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<TipoEnvio> TipoEnvios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

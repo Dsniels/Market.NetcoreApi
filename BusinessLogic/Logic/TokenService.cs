@@ -35,12 +35,13 @@ namespace BusinessLogic.Logic
                 new Claim("username", usuario.UserName),
             };
 
-            if(roles != null && roles.Count > 0) {
-                foreach(var role in roles)
+            if (roles != null && roles.Count > 0)
+            {
+                foreach (var role in roles)
                 {
                     claims.Add(new Claim(ClaimTypes.Role, role));
                 }
-            
+
             }
 
 

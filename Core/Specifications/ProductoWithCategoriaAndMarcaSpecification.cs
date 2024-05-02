@@ -9,10 +9,10 @@ namespace Core.Specifications
 {
     public class ProductoWithCategoriaAndMarcaSpecification : BaseSpecification<Producto>
     {
-        public ProductoWithCategoriaAndMarcaSpecification(ProductoSpecificationsParamts productoParams) 
+        public ProductoWithCategoriaAndMarcaSpecification(ProductoSpecificationsParamts productoParams)
             : base(x =>
-            (string.IsNullOrEmpty(productoParams.Search) || x.Nombre.Contains(productoParams.Search))&&
-            (!productoParams.Marca.HasValue || x.MarcaId == productoParams.Marca) && 
+            (string.IsNullOrEmpty(productoParams.Search) || x.Nombre.Contains(productoParams.Search)) &&
+            (!productoParams.Marca.HasValue || x.MarcaId == productoParams.Marca) &&
             (!productoParams.Categoria.HasValue || x.CategoriaId == productoParams.Categoria)
             )
         {

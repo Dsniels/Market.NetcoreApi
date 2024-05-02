@@ -20,8 +20,8 @@ namespace Core.Entities.OrdenCompra
         }
 
         public int ProductoItemId { get; set; }
-        public string ProductoNombre { get; set;}
-         
-        public string ImagenUrl{ get; set;}
+        public string ProductoNombre { get; set; }
+
+        public string ImagenUrl { get; set; }
     }
 }

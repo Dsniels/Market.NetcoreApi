@@ -8,6 +8,6 @@ namespace Core.Entities
 {
     public class Categoria : ClaseBase
     {
-        public string Nombre { get; set; }  
+        public string Nombre { get; set; }
     }
 }

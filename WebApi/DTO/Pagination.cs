@@ -6,7 +6,7 @@ namespace WebApi.DTO
     {
         public int Count { get; set; }
 
-        public int PageIndex { get; set; } 
+        public int PageIndex { get; set; }
 
         public IReadOnlyList<T> Data { get; set; }
 

@@ -13,7 +13,7 @@ namespace BusinessLogic.Data
     public class MarketDbContextData
     {
 
-        public static async Task CargarDataAsync(MarketDbContext context, ILoggerFactory loggerFactory) 
+        public static async Task CargarDataAsync(MarketDbContext context, ILoggerFactory loggerFactory)
         {
 
             try
@@ -23,11 +23,11 @@ namespace BusinessLogic.Data
                     var marcaData = File.ReadAllText("../BusinessLogic/CargarData/marca.json");
                     var marcas = JsonSerializer.Deserialize<List<Marca>>(marcaData);
 
-                    foreach ( var marca in marcas)
+                    foreach (var marca in marcas)
                     {
                         context.Marca.Add(marca);
                     }
-                    await context.SaveChangesAsync(); 
+                    await context.SaveChangesAsync();
 
                 }
                 if (!context.Categoria.Any())
@@ -71,10 +71,10 @@ namespace BusinessLogic.Data
                 var logger = loggerFactory.CreateLogger<MarketDbContextData>();
                 logger.LogError(e.Message);
             }
-        
-        
-        
-        
+
+
+
+
         }
     }
 }

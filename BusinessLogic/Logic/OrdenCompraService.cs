@@ -29,7 +29,7 @@ namespace BusinessLogic.Logic
         {
             var carritoCompra = await _carritoCompraRepository.GetCarritoCompraAsync(CarritoId);
             var items = new List<OrderItem>();
-            foreach(var item in carritoCompra.Items)
+            foreach (var item in carritoCompra.Items)
             {
                 var productoItem = await _productoRepository.GetByIdAsync(item.Id);
                 var itemOrdenado = new ProductoItemOrdenado(productoItem.Id, productoItem.Nombre, productoItem.Imagen);

@@ -1,4 +1,4 @@
-USE current_database
+USE MASTER 
 
 CREATE TABLE Estudiantes (
    ID INT PRIMARY KEY,

@@ -1,5 +1,3 @@
-USE MASTER 
-
 CREATE TABLE Estudiantes (
    ID INT PRIMARY KEY,
    Nombre VARCHAR(50) NOT NULL,

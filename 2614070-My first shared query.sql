@@ -1,1 +1,1 @@
-create table Productos
+CREATE TABLE Productos
